@@ -1,5 +1,6 @@
 local VirtualUser=game:service'VirtualUser'
 local userInputService = game:service('UserInputService')
+local VIM = game:GetService("VirtualInputManager")
 local ScriptOn = false
 game:service'Players'.LocalPlayer.Idled:connect(function()
 VirtualUser:CaptureController()
@@ -23,7 +24,7 @@ function farmtree()
     local y = 1
     local descendants = game:GetService("Workspace").Plots:FindFirstChild(plot):GetChildren()
     for index, descendant in pairs(descendants) do
-        if descendant:IsA("Model") and descendant:FindFirstChild("Tree_"..y) then
+        if descendant:IsA("Model") and descendant:FindFirstChild("Tree_"..y) and ScriptOn == true then
             repeat
                 repeat
                     _G.Speed = 25
@@ -34,7 +35,7 @@ function farmtree()
                     tween:Play()
                     game.Players.LocalPlayer.Character:findFirstChildOfClass("Humanoid"):ChangeState(11)
                     wait()
-                until game:GetService("Players").LocalPlayer:DistanceFromCharacter(descendant:FindFirstChild("Tree_"..y).Base.Position) < 5
+                until game:GetService("Players").LocalPlayer:DistanceFromCharacter(descendant:FindFirstChild("Tree_"..y).Base.Position) < 5 or ScriptOn == false
                 repeat
                     local A_1 = plot
                     local A_2 = descendant.Name
@@ -42,10 +43,10 @@ function farmtree()
                     local Event = game:GetService("ReplicatedStorage").Communication.Remotes.HitTree
                     Event:FireServer(A_1, A_2, A_3)
                     wait()
-                until not descendant:FindFirstChild("Tree_"..y)
+                until not descendant:FindFirstChild("Tree_"..y) or ScriptOn == false
                 y = y + 1
                 if not descendant:FindFirstChild("Tree_3") then y = 1 wait() end
-            until not descendant:FindFirstChild("Tree_3")
+            until not descendant:FindFirstChild("Tree_3") or ScriptOn == false
         end
     end
 end
