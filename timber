@@ -27,12 +27,12 @@ function farmtree()
             repeat
                 repeat
                     _G.Speed = 100
-                    local EnemyLocation = descendant:FindFirstChild("Tree_"..y).Base
+                    local EnemyLocation = descendant:FindFirstChild("Tree_"..y)
                     local distance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - EnemyLocation.Base.Position).magnitude
                     tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new((distance/_G.Speed), Enum.EasingStyle.Linear)
                     tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(EnemyLocation.Base.Position + EnemyLocation.Base.CFrame.lookVector + Vector3.new(3,0,0), (EnemyLocation.Base.Position))})
                     tween:Play()
-                    Char.Parent:findFirstChildOfClass("Humanoid"):ChangeState(11)
+                    game.Players.LocalPlayer.Character:findFirstChildOfClass("Humanoid"):ChangeState(11)
                     wait()
                 until game:GetService("Players").LocalPlayer:DistanceFromCharacter(descendant:FindFirstChild("Tree_"..y).Base.Position) < 5
                 repeat
@@ -44,7 +44,7 @@ function farmtree()
                     wait()
                 until not descendant:FindFirstChild("Tree_"..y)
                 y = y + 1
-                if not descendant:FindFirstChild("Tree_3") then y = 1 wait(1) end
+                if not descendant:FindFirstChild("Tree_3") then y = 1 wait() end
             until not descendant:FindFirstChild("Tree_3")
         end
     end
