@@ -1,0 +1,56 @@
+local VirtualUser=game:service'VirtualUser'
+local userInputService = game:service('UserInputService')
+local ScriptOn = false
+game:service'Players'.LocalPlayer.Idled:connect(function()
+VirtualUser:CaptureController()
+VirtualUser:ClickButton2(Vector2.new())
+print("Anti-Idle")
+end)
+userInputService.InputBegan:Connect(function(input, chat)
+    if chat then return end
+    if input.KeyCode == Enum.KeyCode.KeypadZero then
+        if ScriptOn == false then
+            ScriptOn = true
+            print("ScriptOn")
+        else
+            ScriptOn = false
+            print("ScriptOff")
+        end
+    end
+end)
+function farmtree()
+    local plot = game:GetService("Players").LocalPlayer.Plot.Value
+    local y = 1
+    local descendants = game:GetService("Workspace").Plots:FindFirstChild(plot):GetChildren()
+    for index, descendant in pairs(descendants) do
+        if descendant:IsA("Model") and descendant:FindFirstChild("Tree_"..y) then
+            repeat
+                repeat
+                    _G.Speed = 100
+                    local EnemyLocation = descendant:FindFirstChild("Tree_"..y).Base
+                    local distance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - EnemyLocation.Base.Position).magnitude
+                    tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new((distance/_G.Speed), Enum.EasingStyle.Linear)
+                    tween = tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(EnemyLocation.Base.Position + EnemyLocation.Base.CFrame.lookVector + Vector3.new(3,0,0), (EnemyLocation.Base.Position))})
+                    tween:Play()
+                    Char.Parent:findFirstChildOfClass("Humanoid"):ChangeState(11)
+                    wait()
+                until game:GetService("Players").LocalPlayer:DistanceFromCharacter(descendant:FindFirstChild("Tree_"..y).Base.Position) < 5
+                repeat
+                    local A_1 = plot
+                    local A_2 = descendant.Name
+                    local A_3 = y
+                    local Event = game:GetService("ReplicatedStorage").Communication.Remotes.HitTree
+                    Event:FireServer(A_1, A_2, A_3)
+                    wait()
+                until not descendant:FindFirstChild("Tree_"..y)
+                y = y + 1
+                if not descendant:FindFirstChild("Tree_3") then y = 1 wait(1) end
+            until not descendant:FindFirstChild("Tree_3")
+        end
+    end
+end
+while wait() do
+    if ScriptOn == true then
+        pcall(farmtree)
+    end
+end
