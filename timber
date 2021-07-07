@@ -26,7 +26,7 @@ function farmtree()
         if descendant:IsA("Model") and descendant:FindFirstChild("Tree_"..y) then
             repeat
                 repeat
-                    _G.Speed = 50
+                    _G.Speed = 25
                     local EnemyLocation = descendant:FindFirstChild("Tree_"..y)
                     local distance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - EnemyLocation.Base.Position).magnitude
                     tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new((distance/_G.Speed), Enum.EasingStyle.Linear)
